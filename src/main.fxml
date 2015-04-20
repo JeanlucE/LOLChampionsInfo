@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController">
+   <children>
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar prefHeight="25.0" prefWidth="600.0">
+               <menus>
+                  <Menu mnemonicParsing="false" text="File">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Update">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Champions" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Help" />
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+            <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" hgap="10.0" prefHeight="35.0" prefWidth="600.0">
+               <children>
+                  <TextField fx:id="summonerNameField" promptText="Summoner Name" />
+                  <ComboBox fx:id="summonerRegionBox" prefHeight="25.0" prefWidth="90.0" promptText="Region" visibleRowCount="6" />
+                  <Button mnemonicParsing="false" onAction="#querySummoner" text="Button" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </FlowPane>
+            <SplitPane dividerPositions="0.4722662440570523" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+               <items>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TilePane fx:id="upperChampionPanel" alignment="CENTER" hgap="25.0" prefHeight="200.0" prefRows="1" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox prefHeight="250.0" prefWidth="77.0" TilePane.alignment="CENTER">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Aatrox" />
+                                          <ImageView fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                             <image>
+                                                <Image url="@../images/loading/Aatrox_0.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="250.0" prefWidth="77.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Aatrox" />
+                                          <ImageView fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                             <image>
+                                                <Image url="@../images/loading/Aatrox_0.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="250.0" prefWidth="77.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Aatrox" />
+                                          <ImageView fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                             <image>
+                                                <Image url="@../images/loading/Aatrox_0.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="250.0" prefWidth="77.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Aatrox" />
+                                          <ImageView fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                             <image>
+                                                <Image url="@../images/loading/Aatrox_0.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="250.0" prefWidth="77.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Aatrox" />
+                                          <ImageView fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                             <image>
+                                                <Image url="@../images/loading/Aatrox_0.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </TilePane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="111.0" prefWidth="598.0">
+                     <children>
+                        <HBox prefHeight="250.0" prefWidth="735.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="300.0" prefWidth="123.0">
+                                 <children>
+                                    <Label fx:id="championName" text="Aatrox">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font name="System Italic" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fx:id="championImage" fitHeight="228.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/loading/Aatrox_0.jpg" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </VBox>
+                              <GridPane hgap="5.0" vgap="5.0" HBox.hgrow="ALWAYS">
+                                <columnConstraints>
+                                  <ColumnConstraints maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
+                                  <ColumnConstraints maxWidth="130.0" minWidth="130.0" prefWidth="130.0" />
+                                    <ColumnConstraints maxWidth="532.0" minWidth="10.0" prefWidth="414.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Label fx:id="passiveName" alignment="TOP_LEFT" prefHeight="100.0" text="PassiveName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill1Name" alignment="TOP_LEFT" prefHeight="100.0" text="QName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill2Name" alignment="TOP_LEFT" prefHeight="100.0" text="WName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill3Name" alignment="TOP_LEFT" prefHeight="100.0" text="EName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill4Name" alignment="TOP_LEFT" prefHeight="100.0" text="RName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="passiveDescription" alignment="TOP_LEFT" text="PassiveDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill2Description" alignment="TOP_LEFT" text="WDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill3Description" alignment="TOP_LEFT" text="EDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill4Description" alignment="TOP_LEFT" text="RDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <ImageView fx:id="passiveSkillImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/passive/Aatrox_Passive.png" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="skill1Image" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/spell/AatroxQ.png" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                    </ImageView>
+                                    <ImageView fx:id="skill2Image" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/spell/AatroxW.png" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                    </ImageView>
+                                    <ImageView fx:id="skill3Image" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/spell/AatroxE.png" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                    </ImageView>
+                                    <ImageView fx:id="skill4Image" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@../images/spell/AatroxR.png" />
+                                       </image>
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                    </ImageView>
+                                    <Label fx:id="skill1Description" alignment="TOP_LEFT" text="QDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </items>
+            </SplitPane>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </children>
+</AnchorPane>

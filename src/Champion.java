@@ -17,7 +17,7 @@ public class Champion {
     private String name;
     private Image loadingImage;
 
-    public Champion(JSONObject championJSON, Image loadingImage){
+    public Champion(JSONObject championJSON, Image loadingImage) {
         name = championJSON.getString("name");
 
         usesMana = championJSON.getString("partype").equals("Mana");
@@ -36,9 +36,10 @@ public class Champion {
             allyTips[i] = allyTipsArray.getString(i);
         }
 
+        long id = ChampionsMap.getInstance().getID(name);
         JSONArray spellsArray = championJSON.getJSONArray("spells");
         for (int i = 0; i < 4; i++) {
-            activeAbilities[i] = new ActiveAbility(spellsArray.getJSONObject(i), ActiveAbility.Type.values()[i]);
+            activeAbilities[i] = new ActiveAbility(spellsArray.getJSONObject(i), ActiveAbility.Type.values()[i], id);
         }
 
         JSONObject passiveJSON = championJSON.getJSONObject("passive");
@@ -63,23 +64,23 @@ public class Champion {
         return allyTips;
     }
 
-    public ActiveAbility getQ(){
+    public ActiveAbility getQ() {
         return activeAbilities[0];
     }
 
-    public ActiveAbility getW(){
+    public ActiveAbility getW() {
         return activeAbilities[1];
     }
 
-    public ActiveAbility getE(){
+    public ActiveAbility getE() {
         return activeAbilities[2];
     }
 
-    public ActiveAbility getR(){
+    public ActiveAbility getR() {
         return activeAbilities[3];
     }
 
-    public PassiveAbility getPassive(){
+    public PassiveAbility getPassive() {
         return passiveAbility;
     }
 
@@ -87,6 +88,7 @@ public class Champion {
         return loadingImage;
     }
 
+    /*
     public void printInfo(){
         Champion c = this;
 
@@ -131,5 +133,5 @@ public class Champion {
         System.out.println("\tDamage: " + r.getDamageType());
         System.out.println("\tScaling: " + r.getMaxScalingCoefficient() + " * " + r.getScalingType());
         System.out.println();
-    }
+    }*/
 }

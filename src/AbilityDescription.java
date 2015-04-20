@@ -65,21 +65,39 @@ public class AbilityDescription {
         if(allMatches.size() == 0)
             addNewSegment(SegmentType.Normal, description);
 
-        JSONArray vars = activeJSON.getJSONArray("vars");
+        //If the ability has vars
+        if(activeJSON.has("vars")) {
+            //get the vars
+            JSONArray vars = activeJSON.getJSONArray("vars");
 
-        for (int i = 0; i < allMatches.size(); i++) {
-            //Attempt to find variables
-            String key = allMatches.get(i).substring(3,5);
-            for (int j = 0; j < vars.length(); j++) {
+            //Try to match vars to patterns matched
+            for (int i = 0; i < allMatches.size(); i++) {
+                //Attempt to the variable
+                String key = allMatches.get(i).substring(3, 5);
+                for (int j = 0; j < vars.length(); j++) {
 
-                JSONObject var = vars.getJSONObject(j);
+                    JSONObject var = vars.getJSONObject(j);
 
-                if(var.getString("key").equals(key))
-                {
+                    if (var.getString("key").equals(key)) {
+                        //Determine segment type
+                        SegmentType segmentType;
+                        String link = var.getString("link");
+                        if (link.equals("spelldamage")) {
+                            segmentType = SegmentType.AP;
+                        } else if (link.equals("attackdamage")) {
+                            segmentType = SegmentType.AD;
+                        } else if (link.equals("bonusattackdamage")) {
+                            segmentType = SegmentType.AD;
+                        } else {
+                            System.out.println(link);
+                            segmentType = SegmentType.Normal;
+                        }
 
+                        //determine replacement string
+
+                    }
                 }
             }
-
         }
 
         /*int endOfLastSegment = 0;
@@ -200,6 +218,13 @@ public class AbilityDescription {
             damageType = DamageType.NoDamage;    */
     }
 
+    /*TODO think about how to add special cases
+    reqs:
+        - can add logic that uses effectburn and vars
+        - can add just a string
+        - checks for special cases from a dictionary
+        - adding special cases easily
+    */
     private void SpecialCases(JSONArray effectBurn, JSONArray vars, ActiveAbility.Type type, long championId)
     {
 

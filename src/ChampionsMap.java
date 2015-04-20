@@ -38,7 +38,7 @@ public class ChampionsMap {
         }
     }
 
-    private long getID(String champion){
+    public long getID(String champion){
         return internalIDMap.get(champion.toLowerCase());
     }
 

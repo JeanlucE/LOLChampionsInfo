@@ -72,6 +72,12 @@ public class AbilityDescription {
 
             //Try to match vars to patterns matched
             for (int i = 0; i < allMatches.size(); i++) {
+
+                //Determine length
+                int startIndex = starts.get(i);
+                int endIndex = ends.get(i);
+                int startLength = endIndex - startIndex;
+
                 //Attempt to the variable
                 String key = allMatches.get(i).substring(3, 5);
                 for (int j = 0; j < vars.length(); j++) {
@@ -81,20 +87,39 @@ public class AbilityDescription {
                     if (var.getString("key").equals(key)) {
                         //Determine segment type
                         SegmentType segmentType;
+                        String scalingType;
                         String link = var.getString("link");
+
                         if (link.equals("spelldamage")) {
                             segmentType = SegmentType.AP;
+                            scalingType = "AP";
                         } else if (link.equals("attackdamage")) {
                             segmentType = SegmentType.AD;
+                            scalingType = "AD";
                         } else if (link.equals("bonusattackdamage")) {
                             segmentType = SegmentType.AD;
+                            scalingType = "Bonus AD";
                         } else {
                             System.out.println(link);
                             segmentType = SegmentType.Normal;
+                            scalingType = link;
                         }
 
                         //determine replacement string
+                        JSONArray coeff = var.getJSONArray("coeff");
+                        String content = "";
+                        if(coeff.length() > 0){
+                            content += coeff.getDouble(0);
 
+                            for (int k = 1; k < coeff.length(); k++) {
+                                content += "/" + coeff.getDouble(k);
+                            }
+                        }
+
+                        //add scaling to content
+                        content += " " + scalingType;
+
+                        addNewSegment(segmentType, content);
                     }
                 }
             }
@@ -217,6 +242,13 @@ public class AbilityDescription {
         else
             damageType = DamageType.NoDamage;    */
     }
+
+    /*TODO General Replacement algorithm
+        1. find matches
+        2. make var -> content map
+        3. find matches and replace according to map
+        4.
+    */
 
     /*TODO think about how to add special cases
     reqs:

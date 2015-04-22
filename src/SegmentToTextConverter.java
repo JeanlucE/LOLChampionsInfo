@@ -35,6 +35,7 @@ public class SegmentToTextConverter {
         fillMap.put(key, color);
     }
 
+    //TODO find a good way to format text for long ability descriptions
     public Text[] convert(AbilityDescription.Segment[] segments)
     {
         Text[] richText = new Text[segments.length];

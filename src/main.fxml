@@ -151,14 +151,14 @@
                                 <columnConstraints>
                                   <ColumnConstraints maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
                                   <ColumnConstraints maxWidth="130.0" minWidth="130.0" prefWidth="130.0" />
-                                    <ColumnConstraints maxWidth="532.0" minWidth="10.0" prefWidth="414.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="532.0" minWidth="10.0" prefWidth="414.0" />
                                 </columnConstraints>
                                 <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
@@ -172,10 +172,6 @@
                                     <Label fx:id="skill2Name" alignment="TOP_LEFT" prefHeight="100.0" text="WName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
                                     <Label fx:id="skill3Name" alignment="TOP_LEFT" prefHeight="100.0" text="EName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
                                     <Label fx:id="skill4Name" alignment="TOP_LEFT" prefHeight="100.0" text="RName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="passiveDescription" alignment="TOP_LEFT" text="PassiveDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill2Description" alignment="TOP_LEFT" text="WDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill3Description" alignment="TOP_LEFT" text="EDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill4Description" alignment="TOP_LEFT" text="RDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
                                     <ImageView fx:id="passiveSkillImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
                                        <image>
                                           <Image url="@../images/passive/Aatrox_Passive.png" />
@@ -219,11 +215,11 @@
                                           <Rectangle2D />
                                        </viewport>
                                     </ImageView>
-                                    <TextFlow fx:id="skill1Description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                       <children>
-                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0.9 AP" />
-                                       </children>
-                                    </TextFlow>
+                                    <TextFlow fx:id="skill1Description" lineSpacing="1.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <TextFlow fx:id="skill2Description" lineSpacing="1.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <TextFlow fx:id="skill3Description" lineSpacing="1.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <TextFlow fx:id="skill4Description" lineSpacing="1.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <Label fx:id="passiveDescription" alignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
                                  </children>
                               </GridPane>
                            </children>

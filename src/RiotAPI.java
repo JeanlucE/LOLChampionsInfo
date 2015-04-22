@@ -113,8 +113,31 @@ public class RiotAPI {
             connection.connect();
 
             int code = connection.getResponseCode();
-            System.out.println("Response Code: " + code);
-
+            if(code != 200) {
+                System.out.println("Response Code: " + code);
+                switch (code)
+                {
+                    case 400:
+                        System.err.println("Bad Request: Syntax Error!");
+                        break;
+                    case 401:
+                        System.err.println("Unauthorized Request: Invalid or no API key provided!");
+                        break;
+                    case 404:
+                        System.err.println("Not Found: API has no match for API request made or summoner does not " +
+                                "exist!");
+                        break;
+                    case 429:
+                        System.err.println("API key rate limit reached: Please wait a moment before another request.");
+                        break;
+                    case 500:
+                        System.err.println("Internal Server Error! Please try again!");
+                        break;
+                    case 503:
+                        System.err.println("API Service Unavailable: Server is currently unreachable.");
+                        break;
+                }
+            }
             InputStream in = connection.getInputStream();
             Scanner scanner = new Scanner(in);
             String response = "";

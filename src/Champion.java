@@ -36,7 +36,7 @@ public class Champion {
             allyTips[i] = allyTipsArray.getString(i);
         }
 
-        long id = ChampionsMap.getInstance().getID(name);
+        long id = championJSON.getInt("id");
         JSONArray spellsArray = championJSON.getJSONArray("spells");
         for (int i = 0; i < 4; i++) {
             activeAbilities[i] = new ActiveAbility(spellsArray.getJSONObject(i), ActiveAbility.Type.values()[i], id);

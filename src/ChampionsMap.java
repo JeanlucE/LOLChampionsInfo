@@ -11,8 +11,11 @@ import java.util.Map;
  * Date: 10/28/14
  * Time: 11:57 PM
  */
+//TODO handle when a summoner or champion does not exist
 public class ChampionsMap {
+    //map to get id for riot api
     private Map<String, Long> internalIDMap = new HashMap<String, Long>(124);
+    //map to get name from id
     private Map<Long, String> internalNameMap = new HashMap<Long, String>(124);
 
     private static ChampionsMap instance;
@@ -34,29 +37,20 @@ public class ChampionsMap {
             long id = champsArray.getJSONObject(champName).getLong("id");
 
             internalIDMap.put(champName.toLowerCase(), id);
-            internalNameMap.put(id, champName);
+            internalNameMap.put(id, champName.toLowerCase());
         }
     }
 
-    public long getID(String champion){
+    private long getID(String champion){
+
+        //special cases where the champion name is not equal to his key
+        if(champion.equals("wukong"))
+            champion = "monkeyking";
+
         return internalIDMap.get(champion.toLowerCase());
     }
 
-    private String getName(long id)
-    {
-        return internalNameMap.get(id);
-    }
-
-    private boolean championExists(String name){
-        return internalIDMap.containsKey(name);
-    }
-
-    private boolean championExists(long id)
-    {
-         return internalIDMap.containsValue(id);
-    }
-
-    public Champion getChampionInfo(String name){
+    public Champion getChampionInfoByName(String name){
         //removes all whitespace and removes all special characters
         name = name.replaceAll("[^a-zA-Z]+", "").trim();
 
@@ -77,5 +71,19 @@ public class ChampionsMap {
         Image loadingScreenImage = riotAPI.getChampionLoadingScreenImage(name);
 
         return new Champion(championJSON, loadingScreenImage);
+    }
+
+    private String getName(long id)
+    {
+        return internalNameMap.get(id);
+    }
+
+    private boolean championExists(String name){
+        return internalIDMap.containsKey(name);
+    }
+
+    private boolean championExists(long id)
+    {
+        return internalIDMap.containsValue(id);
     }
 }

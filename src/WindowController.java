@@ -5,7 +5,6 @@
  * Time: 6:05 PM
  */
 
-import com.sun.javafx.fxml.builder.JavaFXFontBuilder;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -57,11 +56,11 @@ public class WindowController {
     @FXML
     private TextFlow skill1Description;
     @FXML
-    private Label skill2Description;
+    private TextFlow skill2Description;
     @FXML
-    private Label skill3Description;
+    private TextFlow skill3Description;
     @FXML
-    private Label skill4Description;
+    private TextFlow skill4Description;
 
     @FXML
     private TilePane upperChampionPanel;
@@ -91,7 +90,7 @@ public class WindowController {
             protected Void call() {
                 try {
                     String champName = summonerNameField.getText();
-                    final Champion champion = ChampionsMap.getInstance().getChampionInfo(champName);
+                    final Champion champion = ChampionsMap.getInstance().getChampionInfoByName(champName);
 
                     if (champion != null) {
                         Platform.runLater(new Runnable() {
@@ -118,15 +117,18 @@ public class WindowController {
 
                                 skill2Image.setImage(w.getImage());
                                 skill2Name.setText(w.getName());
-                                skill2Description.setText(w.getDescription());
+                                Text[] richTextDescription2 = s2tConverter.convert(w.getRichTextDescription());
+                                skill2Description.getChildren().setAll(richTextDescription2);
 
                                 skill3Image.setImage(e.getImage());
                                 skill3Name.setText(e.getName());
-                                skill3Description.setText(e.getDescription());
+                                Text[] richTextDescription3 = s2tConverter.convert(e.getRichTextDescription());
+                                skill3Description.getChildren().setAll(richTextDescription3);
 
                                 skill4Image.setImage(r.getImage());
                                 skill4Name.setText(r.getName());
-                                skill4Description.setText(r.getDescription());
+                                Text[] richTextDescription4 = s2tConverter.convert(r.getRichTextDescription());
+                                skill4Description.getChildren().setAll(richTextDescription4);
                             }
                         });
                     }

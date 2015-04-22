@@ -17,7 +17,13 @@ public class ActiveAbility {
         //Ability name
         name = activeJSON.getString("name");
 
-        description = new AbilityDescription(activeJSON, t, championId);
+
+        try {
+            description = new AbilityDescription(activeJSON);
+        } catch (Exception e) {
+            e.printStackTrace();
+            description = null;
+        }
 
         this.type = t;
 
@@ -30,12 +36,15 @@ public class ActiveAbility {
     }
 
     public String getDescription() {
-        return description.toString();
+        if(description == null)
+            return "null";
+        else
+            return description.toString();
     }
 
     public AbilityDescription.Segment[] getRichTextDescription()
     {
-        return null;
+        return description.getSegments();
     }
 
     public Type getType() {

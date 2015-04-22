@@ -7,10 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -108,7 +107,15 @@ public class RiotAPI {
         try
         {
             URL request = new URL(requestURL);
-            InputStream in = request.openStream();
+
+            HttpURLConnection connection = (HttpURLConnection)request.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            int code = connection.getResponseCode();
+            System.out.println("Response Code: " + code);
+
+            InputStream in = connection.getInputStream();
             Scanner scanner = new Scanner(in);
             String response = "";
             while(scanner.hasNextLine())

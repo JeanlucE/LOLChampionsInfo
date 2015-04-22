@@ -1,4 +1,5 @@
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
  */
 //TODO special cases for abilities
 public class AbilityDescription {
-    public class Segment {
+    public class Segment implements Cloneable {
         public SegmentType segmentType;
         public String content;
 
@@ -22,17 +23,26 @@ public class AbilityDescription {
             this.segmentType = segmentType;
             this.content = content;
         }
+
+        public Segment clone()
+        {
+            return new Segment(segmentType, content);
+        }
     }
 
     public enum SegmentType {
-        Normal, AP, AD, M_DMG, P_DMG, Special
+        Normal, AP, AD, M_DMG, P_DMG, Special, Replace
     }
 
     private List<Segment> segments = new ArrayList<>(10);
 
-    public AbilityDescription(JSONObject activeJSON, ActiveAbility.Type type, long championId) {
+    public AbilityDescription(JSONObject activeJSON) throws Exception {
+
+        //ability key from riot api
+        String abilityKey = activeJSON.getString("key");
+
         //Ability description
-        String description = activeJSON.getString("tooltip");
+        String description = activeJSON.getString("sanitizedTooltip");
 
         //Replace effect Variables
         JSONArray effectBurn = activeJSON.getJSONArray("effectBurn");
@@ -42,49 +52,86 @@ public class AbilityDescription {
         while (matcher.find()) {
             String group = matcher.group();
             int effectKey = Character.getNumericValue(group.charAt(4));
-            String replacement = effectBurn.getString(effectKey);
+
+            //add special case for e variables here
+
+            String replacement;
+            try {
+                replacement = effectBurn.getString(effectKey);
+            } catch (JSONException e) {
+                replacement = group;
+                System.out.println("var e" + effectKey + " in " + abilityKey + " not found!");
+            }
 
             description = description.replace(matcher.group(), replacement);
         }
 
-        //find all a anf f avariables to replace
+        //find all a and f avariables to replace
         List<String> allMatches = new ArrayList<>();
         List<Integer> starts = new ArrayList<>();
         List<Integer> ends = new ArrayList<>();
 
         matcher = Pattern.compile("\\{\\{ [af]\\d \\}\\}").matcher(description);
 
-        while(matcher.find())
-        {
+        while (matcher.find()) {
             allMatches.add(matcher.group());
             starts.add(matcher.start());
             ends.add(matcher.end());
         }
 
-        //no variables found and we are done
-        if(allMatches.size() == 0)
+        //No special vars --> we are done
+        if (allMatches.size() == 0) {
             addNewSegment(SegmentType.Normal, description);
+            return;
+        }
 
-        //If the ability has vars
-        if(activeJSON.has("vars")) {
-            //get the vars
-            JSONArray vars = activeJSON.getJSONArray("vars");
 
-            //Try to match vars to patterns matched
-            for (int i = 0; i < allMatches.size(); i++) {
+        int currentIndex = 0;
+        //for each match
+        for (int i = 0; i < allMatches.size(); i++) {
+            //add text before variable
+            if (currentIndex != starts.get(i))
+                addNewSegment(SegmentType.Normal, description.substring(currentIndex, starts.get(i)));
+            //add variable text
+            addNewSegment(SegmentType.Replace, allMatches.get(i));
 
-                //Determine length
-                int startIndex = starts.get(i);
-                int endIndex = ends.get(i);
-                int startLength = endIndex - startIndex;
+            currentIndex = ends.get(i);
+        }
+        //add text after last variable
+        if (currentIndex < description.length() - 1)
+            addNewSegment(SegmentType.Normal, description.substring(currentIndex, description.length()));
 
-                //Attempt to the variable
-                String key = allMatches.get(i).substring(3, 5);
+        //if this code is reached vars should exist otherwise no matches were foudn and we are done
+        if (!activeJSON.has("vars"))
+            throw new Exception("activeJSON of " + abilityKey + " doesn't have vars but they" +
+                    " are expected.");
+
+        //get vars array
+        JSONArray vars = activeJSON.getJSONArray("vars");
+
+        for (int i = 0; i < segments.size(); i++) {
+            Segment s = segments.get(i);
+            if (s.segmentType == SegmentType.Replace) {
+
+                int keyIndex = s.content.indexOf('a');
+                if (keyIndex == -1)
+                    keyIndex = s.content.indexOf('f');
+
+                //get key for vars array
+                String key = s.content.substring(keyIndex, keyIndex + 2);
+
+                boolean varFound = false;
+                //find key in vars array
                 for (int j = 0; j < vars.length(); j++) {
 
                     JSONObject var = vars.getJSONObject(j);
 
+                    //key found
                     if (var.getString("key").equals(key)) {
+                        varFound = true;
+
+                        //add special cases for certain a and f variables
+
                         //Determine segment type
                         SegmentType segmentType;
                         String scalingType;
@@ -108,7 +155,7 @@ public class AbilityDescription {
                         //determine replacement string
                         JSONArray coeff = var.getJSONArray("coeff");
                         String content = "";
-                        if(coeff.length() > 0){
+                        if (coeff.length() > 0) {
                             content += coeff.getDouble(0);
 
                             for (int k = 1; k < coeff.length(); k++) {
@@ -119,117 +166,18 @@ public class AbilityDescription {
                         //add scaling to content
                         content += " " + scalingType;
 
-                        addNewSegment(segmentType, content);
+                        s.segmentType = segmentType;
+                        s.content = content;
                     }
                 }
+
+                //preliminary check to see which abilities need special cases
+                if(!varFound){
+                    System.out.println("var " + key + " in " + abilityKey + " not found!");
+                }
+
             }
         }
-
-        /*int endOfLastSegment = 0;
-
-        //Replace ratio variables (a and f)
-        if (activeJSON.has("vars")) {
-            JSONArray vars = activeJSON.getJSONArray("vars");
-
-            //find "a" variables
-            //find patterns of vars: (+{{ a2 }})
-            pattern = Pattern.compile("\\(?\\+?\\{\\{ [af]\\d \\}\\}\\)?");
-            matcher = pattern.matcher(description);
-
-            while (matcher.find()) {
-                //get matched string
-                String group = matcher.group();
-
-                //get varKey
-                int indexOfKey = group.indexOf("a");
-                if (indexOfKey == -1)
-                    indexOfKey = group.indexOf("f");
-
-                String varKey = group.substring(indexOfKey, indexOfKey + 2);
-                String replacement = "";
-
-                //has parantheses?
-                boolean hasParantheses = group.contains("(+");
-
-                boolean varFound = false;
-                for (int i = 0; i < vars.length(); i++) {
-                    JSONObject var = vars.getJSONObject(i);
-                    if (var.getString("key").equals(varKey)) {
-
-                        if (hasParantheses)
-                            replacement += "(+";
-
-                        //get all ratios
-                        JSONArray ratioJSON = var.getJSONArray("coeff");
-                        double[] ratios = new double[ratioJSON.length()];
-                        for (int j = 0; j < ratioJSON.length(); j++) {
-                            ratios[j] = ratioJSON.getDouble(j);
-                        }
-
-                        for (int j = 0; j < ratios.length; j++) {
-                            replacement += ratios[j];
-
-                            if (j < ratios.length - 1) {
-                                replacement += "/"; //add slash when not at end
-                            }
-                        }
-
-                        replacement += " ";
-
-                        //check what dyn is
-                        String dyn = var.optString("dyn");
-                        if (!dyn.equals("")) {
-                            System.out.println("dyn:" + dyn);
-                        }
-
-                        SegmentType segmentType = SegmentType.Normal;
-                        //AP ratio or AD ratio
-                        String link = var.getString("link");
-                        if (link.equals("spelldamage")) {
-                            replacement += "AP";
-                            segmentType = SegmentType.AP;
-                        } else if (link.equals("attackdamage")) {
-                            replacement += "AD";
-                            segmentType = SegmentType.AD;
-                        } else if (link.equals("bonusattackdamage")) {
-                            replacement += "Bonus AD";
-                            segmentType = SegmentType.AD;
-                        } else {
-                            System.out.println(link);
-                            replacement += link;
-                        }
-
-                        if (hasParantheses)
-                            replacement += ")";
-
-                        addNewSegment(SegmentType.Normal, description.substring(endOfLastSegment, matcher.start()));
-                        addNewSegment(segmentType, replacement);
-
-                        description = description.replace(group, replacement);
-
-                        varFound = true;
-                        break;    //if found we are done
-                    }
-                }
-
-                if (!varFound) {
-                    if (hasParantheses)
-                        replacement = "(+" + varKey + ")";
-                    else
-                        replacement = varKey;
-
-                    addNewSegment(SegmentType.Normal, description.substring(endOfLastSegment, matcher.start()));
-                    addNewSegment(SegmentType.Special, replacement);
-                    endOfLastSegment = matcher.start() + replacement.length();
-
-                    description = description.replace(group, replacement);
-                }
-
-                matcher = pattern.matcher(description);
-            }
-        }*/
-
-        //addNewSegment(SegmentType.Normal, description.substring(endOfLastSegment));
 
         /*//Ability Damage type, can contain more than 1 damage type
         String tooltip = activeJSON.getString("sanitizedTooltip");
@@ -243,13 +191,6 @@ public class AbilityDescription {
             damageType = DamageType.NoDamage;    */
     }
 
-    /*TODO General Replacement algorithm
-        1. find matches
-        2. make var -> content map
-        3. find matches and replace according to map
-        4.
-    */
-
     /*TODO think about how to add special cases
     reqs:
         - can add logic that uses effectburn and vars
@@ -257,13 +198,22 @@ public class AbilityDescription {
         - checks for special cases from a dictionary
         - adding special cases easily
     */
-    private void SpecialCases(JSONArray effectBurn, JSONArray vars, ActiveAbility.Type type, long championId)
-    {
+    private void SpecialCases(JSONArray effectBurn, JSONArray vars, ActiveAbility.Type type, long championId) {
 
     }
 
     private void addNewSegment(SegmentType segmentType, String content) {
         segments.add(new Segment(segmentType, content));
+    }
+
+    public Segment[] getSegments() {
+        Segment[] segmentsClone = new Segment[segments.size()];
+
+        for (int i = 0; i < segments.size(); i++) {
+            segmentsClone[i] = segments.get(i).clone();
+        }
+
+        return segmentsClone;
     }
 
     @Override

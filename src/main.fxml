@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController">
@@ -127,11 +128,11 @@
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="111.0" prefWidth="598.0">
                      <children>
-                        <HBox prefHeight="250.0" prefWidth="735.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox prefHeight="250.0" prefWidth="735.0" style="-fx-background-color: #111;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <VBox alignment="CENTER" prefHeight="300.0" prefWidth="123.0">
                                  <children>
-                                    <Label fx:id="championName" text="Aatrox">
+                                    <Label fx:id="championName" text="Aatrox" textFill="WHITE">
                                        <VBox.margin>
                                           <Insets bottom="10.0" />
                                        </VBox.margin>
@@ -166,15 +167,15 @@
                                     <Insets left="5.0" right="5.0" />
                                  </padding>
                                  <children>
-                                    <Label fx:id="passiveName" alignment="TOP_LEFT" prefHeight="100.0" text="PassiveName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill1Name" alignment="TOP_LEFT" prefHeight="100.0" text="QName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill2Name" alignment="TOP_LEFT" prefHeight="100.0" text="WName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill3Name" alignment="TOP_LEFT" prefHeight="100.0" text="EName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill4Name" alignment="TOP_LEFT" prefHeight="100.0" text="RName" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="passiveDescription" alignment="TOP_LEFT" text="PassiveDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill2Description" alignment="TOP_LEFT" text="WDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill3Description" alignment="TOP_LEFT" text="EDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                                    <Label fx:id="skill4Description" alignment="TOP_LEFT" text="RDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="passiveName" alignment="TOP_LEFT" prefHeight="100.0" text="PassiveName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill1Name" alignment="TOP_LEFT" prefHeight="100.0" text="QName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill2Name" alignment="TOP_LEFT" prefHeight="100.0" text="WName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill3Name" alignment="TOP_LEFT" prefHeight="100.0" text="EName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill4Name" alignment="TOP_LEFT" prefHeight="100.0" text="RName" textFill="WHITE" wrapText="true" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="passiveDescription" alignment="TOP_LEFT" text="PassiveDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill2Description" alignment="TOP_LEFT" text="WDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill3Description" alignment="TOP_LEFT" text="EDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <Label fx:id="skill4Description" alignment="TOP_LEFT" text="RDescription" textFill="WHITE" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
                                     <ImageView fx:id="passiveSkillImage" fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
                                        <image>
                                           <Image url="@../images/passive/Aatrox_Passive.png" />
@@ -218,7 +219,11 @@
                                           <Rectangle2D />
                                        </viewport>
                                     </ImageView>
-                                    <Label fx:id="skill1Description" alignment="TOP_LEFT" text="QDescription" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                                    <TextFlow fx:id="skill1Description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0.9 AP" />
+                                       </children>
+                                    </TextFlow>
                                  </children>
                               </GridPane>
                            </children>

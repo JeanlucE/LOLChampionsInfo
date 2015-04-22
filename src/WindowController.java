@@ -5,6 +5,7 @@
  * Time: 6:05 PM
  */
 
+import com.sun.javafx.fxml.builder.JavaFXFontBuilder;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -54,7 +55,7 @@ public class WindowController {
     @FXML
     private Label passiveDescription;
     @FXML
-    private Label skill1Description;
+    private TextFlow skill1Description;
     @FXML
     private Label skill2Description;
     @FXML
@@ -66,6 +67,21 @@ public class WindowController {
     private TilePane upperChampionPanel;
     @FXML
     private TilePane lowerChampionPanel;
+
+    //Non-FX components
+    private SegmentToTextConverter s2tConverter;
+
+    public void init()
+    {
+        Font normalFont = Font.font("System", FontWeight.NORMAL, FontPosture.REGULAR, 12);
+
+        //ap: 99FF99, ad: FF8C00
+        s2tConverter = new SegmentToTextConverter(normalFont, Color.WHITE);
+        s2tConverter.addStyle(AbilityDescription.SegmentType.AD, normalFont, Color.rgb(255, 140, 0));
+        s2tConverter.addStyle(AbilityDescription.SegmentType.AP, normalFont, Color.rgb(153, 255, 153));
+        s2tConverter.addStyle(AbilityDescription.SegmentType.Special, normalFont, Color.BLUE);
+        s2tConverter.addStyle(AbilityDescription.SegmentType.Replace, normalFont, Color.RED);
+    }
 
     @FXML
     void querySummoner(ActionEvent event) {
@@ -97,7 +113,8 @@ public class WindowController {
 
                                 skill1Image.setImage(q.getImage());
                                 skill1Name.setText(q.getName());
-                                skill1Description.setText(q.getDescription());
+                                Text[] richTextDescription1 = s2tConverter.convert(q.getRichTextDescription());
+                                skill1Description.getChildren().setAll(richTextDescription1);
 
                                 skill2Image.setImage(w.getImage());
                                 skill2Name.setText(w.getName());

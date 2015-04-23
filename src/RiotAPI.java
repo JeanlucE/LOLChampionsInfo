@@ -18,6 +18,8 @@ import java.util.Scanner;
  * Date: 10/29/14
  * Time: 12:02 AM
  */
+//TODO cache api calls and check api version: if api version is different download champion data again -->
+// performance
 public class RiotAPI {
 
     private final String API_KEY = "api_key=5b2361e1-7563-478a-8348-5c6ad50d9672";
@@ -101,7 +103,7 @@ public class RiotAPI {
         return realmData.getString("dd");
     }
 
-    //TODO catch response codes
+    //TODO check if we have an internet conection
     private JSONObject getResponse(String requestURL, String context)
     {
         try
@@ -113,8 +115,9 @@ public class RiotAPI {
             connection.connect();
 
             int code = connection.getResponseCode();
+            System.out.println("Response Code: " + code);
+
             if(code != 200) {
-                System.out.println("Response Code: " + code);
                 switch (code)
                 {
                     case 400:

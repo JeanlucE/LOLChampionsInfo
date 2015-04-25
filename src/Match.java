@@ -27,7 +27,12 @@ public class Match {
             long championID = participant.getLong("championId");
 
             Summoner summoner = Summoner.getSummoner(name);
-            Champion champion = ChampionsMap.getInstance().getChampionInfoByID(championID);
+            Champion champion = null;
+            try {
+                champion = ChampionsMap.getInstance().getChampionInfoByID(championID);
+            } catch (ChampionException e) {
+                e.printStackTrace();
+            }
 
             Participant p = new Participant(summoner, champion);
             //Blue side
@@ -80,14 +85,12 @@ public class Match {
         System.out.println("Match Info:");
 
         System.out.println("Blue Side:");
-        for (int i = 0; i < team1.size(); i++) {
-            Participant p = team1.get(i);
+        for (Participant p : team1) {
             System.out.println(p);
         }
 
         System.out.println("Red Side:");
-        for (int i = 0; i < team2.size(); i++) {
-            Participant p = team2.get(i);
+        for (Participant p : team2) {
             System.out.println(p);
         }
     }

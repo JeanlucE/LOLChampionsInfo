@@ -5,5 +5,12 @@
  * Time: 12:41 AM
  */
 public class SummonerException extends Exception {
-    //TODO
+    public SummonerException(String name) {
+        super("Summoner with name " + name + " does not exist.");
+    }
+
+    public SummonerException(long id)
+    {
+        super("Summoner with id " + id + " does not exist.");
+    }
 }

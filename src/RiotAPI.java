@@ -1,6 +1,7 @@
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
+import org.json.JSONWriter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -48,22 +50,22 @@ public class RiotAPI {
     public JSONObject getChampions(){
         String requestURL = API_GET_CHAMPIONS + "?" + API_KEY;
 
-        JSONObject response =  getResponse(requestURL, "getChampions()");
+        JSONObject response =  getResponse(requestURL, APIContext.GET_ALL_CHAMPIONS);
         if(response != null)
             return response.getJSONObject("data");
         else
-            return response;
+            return null;
     }
 
     public JSONObject getChampionByID(long id){
         String requestURL = API_GET_CHAMPION + id + "?" + "champData=all" + "&" + API_KEY;
 
-        return getResponse(requestURL, "getChampionByID()");
+        return getResponse(requestURL, APIContext.GET_CHAMPION);
     }
 
     public JSONObject getCurrentGame(long summonerID){
         String requestURL = API_GET_CURRENT_GAME + summonerID + "?" + API_KEY;
-        return  getResponse(requestURL, "getCurrentGame()");
+        return  getResponse(requestURL, APIContext.GET_GAME);
     }
 
     public JSONObject getSummoner(String summonerName)
@@ -72,7 +74,9 @@ public class RiotAPI {
 
         String requestURL = API_GET_SUMMONERBYNAME + summonerName + "?" + API_KEY;
 
-        return getResponse(requestURL, "getSummoner()");
+        JSONObject summonerJSON =  getResponse(requestURL, APIContext.GET_SUMMONER);
+
+        return summonerJSON;
     }
 
     public Image getChampionLoadingScreenImage(String champion)
@@ -99,12 +103,16 @@ public class RiotAPI {
     private String getDataDragonVersion()
     {
         String requestURL = API_GET_REALM + "?" + API_KEY;
-        JSONObject realmData = getResponse(requestURL, "getDataDragonVersion()");
-        return realmData.getString("dd");
+        JSONObject realmData = getResponse(requestURL, APIContext.GET_DD_VERSION);
+        if(realmData != null)
+            return realmData.getString("dd");
+        else
+            return null;
     }
 
-    //TODO check if we have an internet conection
-    private JSONObject getResponse(String requestURL, String context)
+    //TODO get api version
+
+    private JSONObject getResponse(String requestURL, APIContext context)
     {
         try
         {
@@ -141,6 +149,7 @@ public class RiotAPI {
                         break;
                 }
             }
+
             InputStream in = connection.getInputStream();
             Scanner scanner = new Scanner(in);
             String response = "";
@@ -157,6 +166,12 @@ public class RiotAPI {
         catch (MalformedURLException e)
         {
             System.err.println("Malformed URL in " + context + "!");
+            e.printStackTrace();
+            return null;
+        }
+        catch (UnknownHostException e)
+        {
+            System.err.println("UnknownHostException in " + context + "! Please check your internet connection.");
             e.printStackTrace();
             return null;
         }
@@ -190,5 +205,22 @@ public class RiotAPI {
         }
 
         return image;
+    }
+
+    private enum APIContext{
+        GET_SUMMONER("getSummoner()"), GET_CHAMPION("getChampionByID()"), GET_ALL_CHAMPIONS("getChampions()"),
+        GET_GAME("getCurrentGame()"), GET_DD_VERSION("getDataDragonVersion()");
+
+        private String stringContext = "";
+        private String directory = "";
+
+        private APIContext(String string)
+        {
+            stringContext = string;
+        }
+
+        public String toString(){
+            return stringContext;
+        }
     }
 }

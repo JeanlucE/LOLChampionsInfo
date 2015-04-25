@@ -11,12 +11,11 @@ import java.util.Map;
  * Date: 10/28/14
  * Time: 11:57 PM
  */
-//TODO handle when a summoner or champion does not exist
 public class ChampionsMap {
     //map to get id for riot api
-    private Map<String, Long> internalIDMap = new HashMap<String, Long>(124);
+    private Map<String, Long> internalIDMap = new HashMap<>(124);
     //map to get name from id
-    private Map<Long, String> internalNameMap = new HashMap<Long, String>(124);
+    private Map<Long, String> internalNameMap = new HashMap<>(124);
 
     private static ChampionsMap instance;
 
@@ -36,31 +35,35 @@ public class ChampionsMap {
             String champName = champNames.getString(i);
             long id = champsArray.getJSONObject(champName).getLong("id");
 
-            internalIDMap.put(champName.toLowerCase(), id);
-            internalNameMap.put(id, champName.toLowerCase());
+            champName = champName.toLowerCase();
+            internalIDMap.put(champName, id);
+            internalNameMap.put(id, champName);
         }
     }
 
-    private long getID(String champion){
+    private long getID(String champion) throws ChampionException {
+        champion = champion.toLowerCase();
 
         //special cases where the champion name is not equal to his key
         if(champion.equals("wukong"))
             champion = "monkeyking";
 
-        return internalIDMap.get(champion.toLowerCase());
+        if(!championExists(champion))
+            throw new ChampionException(champion);
+
+        return internalIDMap.get(champion);
     }
 
-    public Champion getChampionInfoByName(String name){
+    public Champion getChampionInfoByName(String name) throws ChampionException {
         //removes all whitespace and removes all special characters
         name = name.replaceAll("[^a-zA-Z]+", "").trim();
 
         return getChampionInfoByID(getID(name));
     }
 
-    public Champion getChampionInfoByID(long id)
-    {
+    public Champion getChampionInfoByID(long id) throws ChampionException {
         if(!championExists(id))
-            return null;
+            throw new ChampionException(id);
 
         RiotAPI riotAPI = RiotAPI.getInstance();
 
@@ -84,6 +87,6 @@ public class ChampionsMap {
 
     private boolean championExists(long id)
     {
-        return internalIDMap.containsValue(id);
+        return internalNameMap.containsKey(id);
     }
 }

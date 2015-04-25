@@ -5,5 +5,11 @@
  * Time: 12:40 AM
  */
 public class ChampionException extends Exception {
-    //TODO
+    public ChampionException(long id) {
+        super("Champion with id " + id + " does not exist");
+    }
+
+    public ChampionException(String name) {
+        super("Champion with name " + name + " does not exist");
+    }
 }

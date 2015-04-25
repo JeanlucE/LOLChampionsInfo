@@ -4,6 +4,9 @@ import org.json.JSONTokener;
 import org.json.JSONWriter;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +23,7 @@ public class RiotAPICache {
 
     private static RiotAPICache instance;
 
-    private final String directory = ".cache/";
+    private final String directory = "cache/";
 
     public static RiotAPICache getInstance() {
         if (instance == null)
@@ -32,18 +35,20 @@ public class RiotAPICache {
     private RiotAPICache() {
         //TODO check version for cache updates
         //create cache directory
-        File f = new File(directory);
-        if (!f.exists()) {
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Path path = Paths.get(directory);
+        try {
+            Files.createDirectories(path);
+            System.out.println("Cache creation successful!");
+        } catch (IOException e) {
+            System.out.println("Cache creation failed!");
+            e.printStackTrace();
         }
     }
 
     public JSONObject findChampion(long id) {
-        File f = new File(directory + "champion/" + id + ".json");
+        Path path = Paths.get(directory + "champion/" + id + ".json");
+
+        File f = path.toFile();
         //if file exists
         if (f.exists()) {
             //read out file from cache
@@ -60,14 +65,23 @@ public class RiotAPICache {
     }
 
     public void storeChampion(long id, JSONObject championJSON) {
-        File f = new File(directory + "champion/" + id + ".json");
+        Path path = Paths.get(directory + "champion/" + id + ".json");
+        File f = path.toFile();
 
-        if (!f.exists()) {
-            try {
-                championJSON.write(new FileWriter(f));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if(f.exists())
+            return;
+
+        try {
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+
+            BufferedWriter bfw = new BufferedWriter(new FileWriter(f));
+
+            championJSON.write(bfw);
+            bfw.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

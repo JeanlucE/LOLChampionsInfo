@@ -36,6 +36,7 @@ public class RiotAPI {
     private final String API_GET_REALM = API_BASE_Global + "/api/lol/static-data/euw/v1.2/realm";
 
     private static RiotAPI instance;
+    private RiotAPICache APICache;
 
     public static RiotAPI getInstance(){
         if(instance == null)
@@ -45,6 +46,7 @@ public class RiotAPI {
     }
 
     private RiotAPI() {
+        APICache = RiotAPICache.getInstance();
     }
 
     public JSONObject getChampions(){
@@ -57,10 +59,18 @@ public class RiotAPI {
             return null;
     }
 
-    public JSONObject getChampionByID(long id){
-        String requestURL = API_GET_CHAMPION + id + "?" + "champData=all" + "&" + API_KEY;
+    public JSONObject getChampionByID(long id)
+    {
+        JSONObject result = APICache.findChampion(id);
+        if(result == null)
+        {
+            String requestURL = API_GET_CHAMPION + id + "?" + "champData=all" + "&" + API_KEY;
+            result = getResponse(requestURL, APIContext.GET_CHAMPION);
+        }
 
-        return getResponse(requestURL, APIContext.GET_CHAMPION);
+        APICache.storeChampion(id, result);
+
+        return result;
     }
 
     public JSONObject getCurrentGame(long summonerID){

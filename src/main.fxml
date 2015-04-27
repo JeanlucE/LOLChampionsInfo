@@ -22,6 +22,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Update">
                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#clearCache" text="Clear Cache" />
                         <MenuItem mnemonicParsing="false" text="Champions" />
                      </items>
                   </Menu>

@@ -148,5 +148,10 @@ public class WindowController {
 
     }
 
+    @FXML
+    void clearCache(ActionEvent event) {
+        RiotAPICache.getInstance().clear();
+    }
+
 }
 

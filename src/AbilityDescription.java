@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * Date: 17/3/2015
  * Time: 6:52 PM
  */
-//TODO special cases for abilities
+//TODO special cases for abilities!
 public class AbilityDescription {
     private List<Segment> segments = new ArrayList<>(10);
 

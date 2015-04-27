@@ -1,7 +1,5 @@
 import org.json.JSONObject;
-import org.json.JSONStringer;
 import org.json.JSONTokener;
-import org.json.JSONWriter;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -19,11 +17,12 @@ public class RiotAPICache {
     // - summoner id
     // - champion id -> name
     // - key -> champion id
-    // - champion data
 
     private static RiotAPICache instance;
 
     private final String directory = "cache/";
+    private final String champDirectory = directory + "champion/";
+    private final String allChamps = directory + "allchampions.json";
 
     public static RiotAPICache getInstance() {
         if (instance == null)
@@ -37,51 +36,120 @@ public class RiotAPICache {
         //create cache directory
         Path path = Paths.get(directory);
         try {
-            Files.createDirectories(path);
-            System.out.println("Cache creation successful!");
+            if (!path.toFile().exists()) {
+                System.out.print("Creating cache...");
+                Files.createDirectories(path);
+                System.out.println("successful!");
+            } else {
+                System.out.println("Cache already exists!");
+            }
+
         } catch (IOException e) {
-            System.out.println("Cache creation failed!");
+            System.out.println("failed!");
             e.printStackTrace();
         }
     }
 
+    public void clear() {
+        Path championPath = Paths.get(champDirectory);
+        File championDir = championPath.toFile();
+
+        //clear champion data
+        if (championDir.exists()) {
+            for (File f : championDir.listFiles()) {
+                if (f.delete()) {
+                    System.out.println("Deleting: " + f.getName());
+                }
+            }
+
+            if (championDir.delete()) {
+                System.out.println("Deleting: " + championDir.getName());
+            }
+        }
+
+        System.out.println("Cache cleared!");
+    }
+
     public JSONObject findChampion(long id) {
-        Path path = Paths.get(directory + "champion/" + id + ".json");
+        Path path = Paths.get(champDirectory + id + ".json");
 
         File f = path.toFile();
-        //if file exists
-        if (f.exists()) {
-            //read out file from cache
-            JSONTokener jsonTokener = new JSONTokener("");
-            try {
-                jsonTokener = new JSONTokener(new FileReader(f));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            JSONObject result = new JSONObject(jsonTokener);
+        try {
+            JSONObject result = FileToJSON(f);
             return result;
-        } else
+        } catch (IOException e) {
             return null;
+        }
+
     }
 
     public void storeChampion(long id, JSONObject championJSON) {
-        Path path = Paths.get(directory + "champion/" + id + ".json");
+        Path path = Paths.get(champDirectory + id + ".json");
+        File f = path.toFile();
+
+
+        if (f.exists())
+            return;
+
+        try {
+            JSONToFile(path, championJSON);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JSONObject findAllChampions() {
+        Path path = Paths.get(allChamps);
+
+        File f = path.toFile();
+
+        try {
+            JSONObject result = FileToJSON(f);
+            return result;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public void storeAllChampions(JSONObject jsonObject)
+    {
+        Path path = Paths.get(allChamps);
         File f = path.toFile();
 
         if(f.exists())
             return;
 
         try {
-            Files.createDirectories(path.getParent());
-            Files.createFile(path);
-
-            BufferedWriter bfw = new BufferedWriter(new FileWriter(f));
-
-            championJSON.write(bfw);
-            bfw.flush();
-
-        } catch (IOException e) {
+            JSONToFile(path, jsonObject);
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
+    }
+
+    //TODO fix
+    private JSONObject FileToJSON(File f) throws IOException {
+        if (f.exists()) {
+            //read out file from cache
+            JSONTokener jsonTokener;
+            FileReader fileReader = new FileReader(f);
+            jsonTokener = new JSONTokener(fileReader);
+            fileReader.close();
+
+            return new JSONObject(jsonTokener);
+        } else
+            throw new FileNotFoundException();
+    }
+
+    private void JSONToFile(Path path, JSONObject jsonObject) throws IOException {
+        Files.createDirectories(path.getParent());
+        Files.createFile(path);
+
+        BufferedWriter bfw = new BufferedWriter(new FileWriter(path.toFile()));
+
+        jsonObject.write(bfw);
+        bfw.flush();
+        bfw.close();
     }
 }

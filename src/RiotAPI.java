@@ -50,7 +50,7 @@ public class RiotAPI {
 
     public JSONObject getChampions() {
 
-        JSONObject response = APICache.findAllChampions();
+        JSONObject response = APICache.get(APIContext.GET_ALL_CHAMPIONS, "allchampions");
 
         if (response == null) {
             String requestURL = API_GET_CHAMPIONS + "?" + API_KEY;
@@ -58,7 +58,7 @@ public class RiotAPI {
         }
 
         if(response != null) {
-            APICache.storeAllChampions(response);
+            APICache.put(APIContext.GET_ALL_CHAMPIONS, "allchampions", response);
             return response.getJSONObject("data");
         }
         else
@@ -66,13 +66,13 @@ public class RiotAPI {
     }
 
     public JSONObject getChampionByID(long id) {
-        JSONObject result = APICache.findChampion(id);
+        JSONObject result = APICache.get(APIContext.GET_CHAMPION, String.valueOf(id));
         if (result == null) {
             String requestURL = API_GET_CHAMPION + id + "?" + "champData=all" + "&" + API_KEY;
             result = getResponse(requestURL, APIContext.GET_CHAMPION);
         }
 
-        APICache.storeChampion(id, result);
+        APICache.put(APIContext.GET_CHAMPION, String.valueOf(id), result);
 
         return result;
     }
@@ -198,19 +198,26 @@ public class RiotAPI {
         return image;
     }
 
-    private enum APIContext {
-        GET_SUMMONER("getSummoner()"), GET_CHAMPION("getChampionByID()"), GET_ALL_CHAMPIONS("getChampions()"),
-        GET_GAME("getCurrentGame()"), GET_API_VERSION("getDataDragonVersion()");
+    public enum APIContext {
+        GET_SUMMONER("getSummoner()", "summoner/"), GET_CHAMPION("getChampionByID()", "champion/"),
+        GET_ALL_CHAMPIONS("getChampions()", ""), GET_GAME("getCurrentGame()", "game/"),
+        GET_API_VERSION("getDataDragonVersion()", "");
 
         private String stringContext = "";
-        private String directory = "";
+        private String cacheDirectory = "";
 
-        private APIContext(String string) {
-            stringContext = string;
+        private APIContext(String stringContext, String cacheDirectory) {
+            this.stringContext = stringContext;
+            this.cacheDirectory = cacheDirectory;
         }
 
         public String toString() {
             return stringContext;
+        }
+
+        public String getCacheDirectory()
+        {
+            return cacheDirectory;
         }
     }
 }

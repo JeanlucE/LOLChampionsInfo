@@ -18,19 +18,12 @@ public class RiotAPICache {
     // - champion id -> name
     // - key -> champion id
 
-    private static RiotAPICache instance;
-
     private final String directory = "cache/";
+    private final String versionFile = "cacheversion.txt";
 
-    public static RiotAPICache getInstance() {
-        if (instance == null)
-            instance = new RiotAPICache();
+    private String currentVersion = null;
 
-        return instance;
-    }
-
-    private RiotAPICache() {
-        //TODO check version for cache updates
+    public RiotAPICache() {
 
         //create cache directory
         Path path = Paths.get(directory);
@@ -39,6 +32,8 @@ public class RiotAPICache {
                 System.out.print("Creating cache...");
                 Files.createDirectories(path);
                 System.out.println("successful!");
+
+
             } else {
                 System.out.println("Cache folder already exists!");
             }
@@ -59,7 +54,7 @@ public class RiotAPICache {
 
             //skip api contexts where the cache is stored directly in the main cache folder
             //these files are deleted afterwards
-            if(cacheDirectory == "")
+            if(cacheDirectory.equals(""))
                 continue;
             else
                 path = Paths.get(directory + cacheDirectory);
@@ -88,7 +83,7 @@ public class RiotAPICache {
         {
             for(File f: mainDir.listFiles())
             {
-                if(f.delete())
+                if(!f.getName().equals(versionFile) && f.delete())
                 {
                     System.out.println("Deleted: " + f.getName());
                 }
@@ -130,6 +125,63 @@ public class RiotAPICache {
         }
     }
 
+    //Checks version in version file if it exists
+    //if the version file doesnt exist, clear everything and write version
+    //if the version file exists and the version is the same, do nothing
+    //if the version file exists and the version is different, clear everything and write version
+    //return if cache is usable
+    public boolean checkVersion(String APIVersion) {
+
+        try {
+            currentVersion = parseVersionFile();
+
+            if(currentVersion != null)
+            {
+                if(!currentVersion.equals(APIVersion)) {
+                    clear();
+                    writeVersionFile();
+                }
+                else
+                {
+                    //cache is up to date
+                }
+            }
+            else
+            {
+                //file is empty
+                clear();
+                try {
+                    currentVersion = APIVersion;
+                    writeVersionFile();
+                    return true;
+                } catch (IOException e1) {
+                    //cant write version file--> do not use cache
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (FileNotFoundException e) {
+            //file does not exist
+            clear();
+            try {
+                currentVersion = APIVersion;
+                writeVersionFile();
+                return true;
+            } catch (IOException e1) {
+                //cant write version file--> do not use cache
+                return false;
+            }
+        }
+        catch (IOException e)
+        {
+            //some other ioexception --> dont use cache
+            return false;
+        }
+
+
+    }
+
     private JSONObject FileToJSON(File f) throws IOException {
         if (f.exists()) {
             //read out file from cache
@@ -153,5 +205,33 @@ public class RiotAPICache {
         jsonObject.write(bfw);
         bfw.flush();
         bfw.close();
+    }
+
+    private String parseVersionFile() throws IOException {
+        File file = Paths.get(directory + versionFile).toFile();
+
+        if(!file.exists())
+            throw new FileNotFoundException();
+
+        BufferedReader fileReader = new BufferedReader(new FileReader(file));
+        String version = fileReader.readLine();
+        System.out.println("Read cache version: " + version);
+        return version;
+    }
+
+    private void writeVersionFile() throws IOException {
+        File file = Paths.get(directory + versionFile).toFile();
+
+        if(file.exists() || file.createNewFile())
+        {
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file));
+            fileWriter.write(currentVersion);
+            fileWriter.close();
+            System.out.println();
+        }
+        //version file could not be written
+        else {
+            throw new IOException();
+        }
     }
 }

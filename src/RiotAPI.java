@@ -45,7 +45,14 @@ public class RiotAPI {
     }
 
     private RiotAPI() {
-        APICache = RiotAPICache.getInstance();
+        APICache = new RiotAPICache();
+
+        APICache.checkVersion(getAPIVersion());
+    }
+
+    public void clearCache()
+    {
+        APICache.clear();
     }
 
     public JSONObject getChampions() {

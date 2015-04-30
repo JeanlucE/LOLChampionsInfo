@@ -32,11 +32,11 @@ public class SegmentToTextConverter {
     }
 
     //TODO find a good way to format text for long ability descriptions
-    public Text[] convert(AbilityDescription.Segment[] segments) {
+    public Text[] convert(Segment[] segments) {
         Text[] richText = new Text[segments.length];
 
         for (int i = 0; i < segments.length; i++) {
-            AbilityDescription.Segment segment = segments[i];
+            Segment segment = segments[i];
 
             //get Font
             Font f = fontMap.get(segment.segmentType);

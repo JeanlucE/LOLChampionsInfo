@@ -19,7 +19,6 @@ import java.util.Scanner;
  * Date: 10/29/14
  * Time: 12:02 AM
  */
-//TODO cache api calls and check api version: if api version is different download champion data again -->
 // performance
 public class RiotAPI {
 
@@ -46,6 +45,7 @@ public class RiotAPI {
 
     private RiotAPI() {
         APICache = new RiotAPICache();
+        //TODO if no internet is available or api is unreachable, dont clear cache
 
         APICache.checkVersion(getAPIVersion());
     }

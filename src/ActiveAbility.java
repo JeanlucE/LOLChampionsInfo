@@ -42,7 +42,7 @@ public class ActiveAbility {
             return description.toString();
     }
 
-    public AbilityDescription.Segment[] getRichTextDescription()
+    public Segment[] getRichTextDescription()
     {
         return description.getSegments();
     }

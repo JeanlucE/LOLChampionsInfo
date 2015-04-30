@@ -13,10 +13,6 @@ import java.nio.file.Paths;
  * Time: 13:24
  */
 public class RiotAPICache {
-    //TODO cache:
-    // - summoner id
-    // - champion id -> name
-    // - key -> champion id
 
     private final String directory = "cache/";
     private final String versionFile = "cacheversion.txt";

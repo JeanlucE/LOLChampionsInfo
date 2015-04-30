@@ -3,7 +3,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,21 +16,18 @@ import java.util.regex.Pattern;
  * Time: 6:52 PM
  */
 //TODO special cases for abilities!
+
 public class AbilityDescription {
     private List<Segment> segments = new ArrayList<>(10);
+    private static Map<String, AbilityConversion> specialCases = new HashMap<>(50);
 
-    public class Segment implements Cloneable {
-        public SegmentType segmentType;
-        public String content;
-
-        public Segment(SegmentType segmentType, String content) {
-            this.segmentType = segmentType;
-            this.content = content;
-        }
-
-        public Segment clone() {
-            return new Segment(segmentType, content);
-        }
+    static {
+        specialCases.put("ahrifoxfiref1", new AbilityConversion() {
+            @Override
+            public Segment resolveString(JSONArray effectBurn, JSONArray vars) {
+                return new Segment(SegmentType.Normal, "60%");
+            }
+        });
     }
 
     public enum SegmentType {
@@ -36,7 +35,6 @@ public class AbilityDescription {
     }
 
     public AbilityDescription(JSONObject activeJSON) throws Exception {
-
         //ability key from riot api
         String abilityKey = activeJSON.getString("key");
 
@@ -67,12 +65,6 @@ public class AbilityDescription {
 
         //find all a and f avariables to replace
         List<TextVariable> allMatches = new ArrayList<>();
-
-        /*List<String> allMatches = new ArrayList<>();
-        List<Integer> starts = new ArrayList<>();
-        List<Integer> ends = new ArrayList<>();
-        List<Boolean> hasPlus = new ArrayList<>();
-        List<Boolean> hasParantheses = new ArrayList<>();  */
 
         matcher = Pattern.compile("\\{\\{ [af]\\d \\}\\}").matcher(description);
 
@@ -149,62 +141,64 @@ public class AbilityDescription {
 
                 JSONObject var = findVar(key, vars);
                 //preliminary check to see which abilities need special cases
+                Segment replacement;
                 if (var == null) {
-                    System.out.println("var " + key + " in " + abilityKey + " not found!");
-                    //special cases where an a or f variable does not exist
-                } else {
-                    //add special cases for certain a and f variables that do exist in vars
 
+                    //add special cases for certain a and f variables that do exist in vars
+                    replacement = SpecialCases(abilityKey.toLowerCase(), key, effectBurn, vars);
+                    System.out.println("var " + key + " in " + abilityKey + " not found! Replacement: " + replacement.content);
+                } else {
+                    replacement = new Segment(null, "");
                     //Determine segment type
-                    SegmentType segmentType;
                     String scalingType;
                     String link = var.getString("link");
 
                     switch (link) {
                         case "spelldamage":
-                            segmentType = SegmentType.AP;
+                            replacement.segmentType = SegmentType.AP;
                             scalingType = "AP";
                             break;
                         case "attackdamage":
-                            segmentType = SegmentType.AD;
+                            replacement.segmentType = SegmentType.AD;
                             scalingType = "AD";
                             break;
                         case "bonusattackdamage":
-                            segmentType = SegmentType.AD;
+                            replacement.segmentType = SegmentType.AD;
                             scalingType = "Bonus AD";
                             break;
                         default:
                             System.out.println(link);
-                            segmentType = SegmentType.Normal;
+                            replacement.segmentType = SegmentType.Normal;
                             scalingType = link;
                             break;
                     }
 
                     //determine replacement string
                     JSONArray coeff = var.getJSONArray("coeff");
-                    String content = tv.prefix + "";
+                    replacement.content = tv.prefix + "";
 
 
                     //standard behaviour for coefficients
                     if (coeff.length() > 0) {
-                        content += coeff.getDouble(0);
+                        replacement.content += coeff.getDouble(0);
 
                         for (int k = 1; k < coeff.length(); k++) {
-                            content += "/" + coeff.getDouble(k);
+                            replacement.content += "/" + coeff.getDouble(k);
                         }
                     }
 
                     //add scaling to content
-                    content += " " + scalingType;
+                    replacement.content += " " + scalingType;
 
                     //add suffix
-                    content += tv.suffix;
-
-                    s.segmentType = segmentType;
-                    s.content = content;
-
-                    //TODO highlight physical, magic or true damage
+                    replacement.content += tv.suffix;
                 }
+
+                replacement = replacement == null ? new Segment(null, null) : replacement;
+
+                s.segmentType = replacement.segmentType == null ? s.segmentType : replacement.segmentType;
+                s.content = replacement.content == null ? s.content : replacement.content;
+                //TODO highlight physical, magic or true damage
             }
         }
     }
@@ -230,8 +224,7 @@ public class AbilityDescription {
         return toReturn;
     }
 
-    private TextVariable findTV(String match, List<TextVariable> list)
-    {
+    private TextVariable findTV(String match, List<TextVariable> list) {
         for (TextVariable tv : list) {
             if (tv.match.equals(match)) {
                 return tv;
@@ -261,8 +254,13 @@ public class AbilityDescription {
         - checks for special cases from a dictionary
         - adding special cases easily
     */
-    private void SpecialCases(String abilityKey, String varKey, JSONArray effectBurn, JSONArray vars) {
-
+    private Segment SpecialCases(String abilityKey, String varKey, JSONArray effectBurn, JSONArray vars) {
+        String key = abilityKey + varKey;
+        if (specialCases.containsKey(key)) {
+            return specialCases.get(abilityKey + varKey).resolveString(effectBurn, vars);
+        } else {
+            return new Segment(null, null);
+        }
     }
 
     private void addNewSegment(SegmentType segmentType, String content) {

@@ -39,7 +39,7 @@ public class Champion {
         long id = championJSON.getInt("id");
         JSONArray spellsArray = championJSON.getJSONArray("spells");
         for (int i = 0; i < 4; i++) {
-            activeAbilities[i] = new ActiveAbility(spellsArray.getJSONObject(i), ActiveAbility.Type.values()[i], id);
+            activeAbilities[i] = new ActiveAbility(spellsArray.getJSONObject(i), ActiveAbility.Type.values()[i]);
         }
 
         JSONObject passiveJSON = championJSON.getJSONObject("passive");

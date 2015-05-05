@@ -25,16 +25,27 @@ public class AbilityDescription {
         specialCases.put("ahrifoxfiref1", new AbilityConversion() {
             @Override
             public Segment resolveString(JSONArray effectBurn, JSONArray vars) {
-                return new Segment(SegmentType.Normal, "60%");
+                return new Segment(SegmentType.Normal, "30%");
             }
         });
+        specialCases.put("phosphorusbombf1", new AbilityConversion() {
+            @Override
+            public Segment resolveString(JSONArray effectBurn, JSONArray vars) {
+                return new Segment(SegmentType.Bonus_AD, "0.5 Bonus AD");
+            }
+        });
+
+
+        //TODO "missing" special cases: aatroxwf5, aatroxwf4, aatroxre7, azirwf2, azirwf1, azirwf4, aziref1,
+        // brandblazef1, evelynnqf2, ezrealmysticshotf3,
+        //TODO "replace" special cases: dariusR
     }
 
     public enum SegmentType {
-        Normal, AP, AD, M_DMG, P_DMG, Special, Replace
+        Normal, AP, AD, Bonus_AD, M_DMG, P_DMG, Special, Replace
     }
 
-    public AbilityDescription(JSONObject activeJSON) throws Exception {
+    public AbilityDescription(JSONObject activeJSON) throws AbilityException {
         //ability key from riot api
         String abilityKey = activeJSON.getString("key");
 
@@ -117,9 +128,10 @@ public class AbilityDescription {
         if (currentIndex < description.length() - 1)
             addNewSegment(SegmentType.Normal, description.substring(currentIndex, description.length()));
 
+        //TODO catch this exception
         //if this code is reached vars should exist otherwise no matches were foudn and we are done
         if (!activeJSON.has("vars"))
-            throw new Exception("activeJSON of " + abilityKey + " doesn't have vars but they" +
+            throw new AbilityException("activeJSON of " + abilityKey + " doesn't have vars but they" +
                     " are expected.");
 
         //get vars array

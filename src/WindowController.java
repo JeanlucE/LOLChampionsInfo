@@ -72,18 +72,20 @@ public class WindowController {
 
     public void init()
     {
-        Font normalFont = Font.font("System", FontWeight.NORMAL, FontPosture.REGULAR, 12);
+        Font normalFont = Font.font("Myriad Pro", FontWeight.SEMI_BOLD, FontPosture.REGULAR, 13);
 
         //ap: 99FF99, ad: FF8C00
         s2tConverter = new SegmentToTextConverter(normalFont, Color.WHITE);
         s2tConverter.addStyle(AbilityDescription.SegmentType.AD, normalFont, Color.rgb(255, 140, 0));
         s2tConverter.addStyle(AbilityDescription.SegmentType.AP, normalFont, Color.rgb(153, 255, 153));
+        s2tConverter.addStyle(AbilityDescription.SegmentType.Bonus_AD, normalFont, Color.rgb(255, 140, 0));
         s2tConverter.addStyle(AbilityDescription.SegmentType.Special, normalFont, Color.BLUE);
         s2tConverter.addStyle(AbilityDescription.SegmentType.Replace, normalFont, Color.RED);
     }
 
     @FXML
     void querySummoner(ActionEvent event) {
+
 
         Task<Void> task = new Task<Void>() {
             @Override

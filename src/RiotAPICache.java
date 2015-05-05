@@ -13,6 +13,7 @@ import java.nio.file.Paths;
  * Time: 13:24
  */
 public class RiotAPICache {
+    //TODO cache takes very long to load, when a lot of champions are already downlaoded
 
     private final String directory = "cache/";
     private final String versionFile = "cacheversion.txt";

@@ -13,14 +13,14 @@ public class ActiveAbility {
     private Type type;
     private Image image;
 
-    public ActiveAbility(JSONObject activeJSON, Type t, long championId) {
+    public ActiveAbility(JSONObject activeJSON, Type t) {
         //Ability name
         name = activeJSON.getString("name");
 
 
         try {
             description = new AbilityDescription(activeJSON);
-        } catch (Exception e) {
+        } catch (AbilityException e) {
             e.printStackTrace();
             description = null;
         }
@@ -36,15 +36,18 @@ public class ActiveAbility {
     }
 
     public String getDescription() {
-        if(description == null)
+        if (description == null)
             return "null";
         else
             return description.toString();
     }
 
-    public Segment[] getRichTextDescription()
-    {
-        return description.getSegments();
+    public Segment[] getRichTextDescription() {
+        //TODO handle broken descriptions
+        if(description != null)
+            return description.getSegments();
+        else
+            return new Segment[0];
     }
 
     public Type getType() {

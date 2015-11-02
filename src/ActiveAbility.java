@@ -17,11 +17,10 @@ public class ActiveAbility {
         //Ability name
         name = activeJSON.getString("name");
 
-
         try {
             description = new AbilityDescription(activeJSON);
         } catch (AbilityException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             description = null;
         }
 

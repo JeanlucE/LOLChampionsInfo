@@ -37,8 +37,17 @@ public class AbilityDescription {
 
 
         //TODO "missing" special cases: aatroxwf5, aatroxwf4, aatroxre7, azirwf2, azirwf1, azirwf4, aziref1,
-        // brandblazef1, evelynnqf2, ezrealmysticshotf3,
-        //TODO "replace" special cases: dariusR
+        // brandblazef1, evelynnqf2, ezrealmysticshotf3, parleyf2 (gangplank), gnarqf1, gnarwf1, gragasef1,
+        // kalistaexpungewrapperf1, khazixqf3, khazixqf2, wujustylef1(masteryi), missfortunericochetshotf1,
+        // missfortunericochetshotf2, namiwf1, consumef3(nunu), consumef4, consumef5, absolutezerof2(nunu), reksaif1,
+        // renektoncleavef3, renektoncleavef4, renektoncleavef5, renektoncleavef6, renektonpreexecutef3, rengarqf2,
+        // rengarqf4, rengarwf2, rengarwf1, rengarwf3, rengaref1, ryzeqf1, ryzewf1, ryzeef1, ryzeef2,
+        //TODO "replace" special cases: dariusR, heimerdinger, jaxR, karma(@text), leonaE(bonusarmor,
+        // bonusspellblock), malphiteE(armor), nasusQ(@stacks), nautilusw,(bonushealth), nautliusq(@special
+        // .nautilusq), rammusw(armor), sejuaniW(bnoushealth)
+        //TODO "vars missing" special cases: garenE, gnarE, riftwalk(kassadin), missfortuneviciousstrikes, reksaiE,
+
+        //TODO other bugs: Ryze images,
     }
 
     public enum SegmentType {

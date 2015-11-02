@@ -92,6 +92,7 @@ public class RiotAPICache {
         System.out.println("Cache cleared!");
     }
 
+    //TODO if file is empty or thorws an exception when parsing return null and delete json
     public JSONObject get(RiotAPI.APIContext apiContext, String key)
     {
         Path path = Paths.get(directory + apiContext.getCacheDirectory() + key + ".json");
@@ -128,6 +129,9 @@ public class RiotAPICache {
     //if the version file exists and the version is different, clear everything and write version
     //return if cache is usable
     public boolean checkVersion(String APIVersion) {
+        //Dont use cache if APIVersion is nothing useful
+        if(APIVersion == null ||APIVersion.equals(""))
+            return false;
 
         try {
             currentVersion = parseVersionFile();

@@ -35,6 +35,7 @@ public class RiotAPI {
 
     private static RiotAPI instance;
     private RiotAPICache APICache;
+    private boolean useCache = true;
 
     public static RiotAPI getInstance() {
         if (instance == null)
@@ -47,39 +48,50 @@ public class RiotAPI {
         APICache = new RiotAPICache();
         //TODO if no internet is available or api is unreachable, dont clear cache
 
-        APICache.checkVersion(getAPIVersion());
+        String apiversion = getAPIVersion();
+        useCache = APICache.checkVersion(apiversion);
     }
 
-    public void clearCache()
-    {
+    public void clearCache() {
         APICache.clear();
     }
 
     public JSONObject getChampions() {
 
-        JSONObject response = APICache.get(APIContext.GET_ALL_CHAMPIONS, "allchampions");
+        JSONObject response = null;
+
+        if (useCache) {
+            response = APICache.get(APIContext.GET_ALL_CHAMPIONS, "allchampions");
+        }
 
         if (response == null) {
             String requestURL = API_GET_CHAMPIONS + "?" + API_KEY;
             response = getResponse(requestURL, APIContext.GET_ALL_CHAMPIONS);
         }
 
-        if(response != null) {
-            APICache.put(APIContext.GET_ALL_CHAMPIONS, "allchampions", response);
+        if (response != null) {
+            if (useCache) {
+                APICache.put(APIContext.GET_ALL_CHAMPIONS, "allchampions", response);
+            }
             return response.getJSONObject("data");
-        }
-        else
+        } else
             return null;
     }
 
     public JSONObject getChampionByID(long id) {
-        JSONObject result = APICache.get(APIContext.GET_CHAMPION, String.valueOf(id));
+
+        JSONObject result = null;
+        if (useCache) {
+            result = APICache.get(APIContext.GET_CHAMPION, String.valueOf(id));
+        }
+
         if (result == null) {
             String requestURL = API_GET_CHAMPION + id + "?" + "champData=all" + "&" + API_KEY;
             result = getResponse(requestURL, APIContext.GET_CHAMPION);
         }
 
-        APICache.put(APIContext.GET_CHAMPION, String.valueOf(id), result);
+        if (useCache)
+            APICache.put(APIContext.GET_CHAMPION, String.valueOf(id), result);
 
         return result;
     }
@@ -222,8 +234,7 @@ public class RiotAPI {
             return stringContext;
         }
 
-        public String getCacheDirectory()
-        {
+        public String getCacheDirectory() {
             return cacheDirectory;
         }
     }
